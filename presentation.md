@@ -34,11 +34,23 @@
 
 ---
 
+![fit](images/js-to-elm.jpg)
+
+^ Like me, most look at syntax and primitives
+
+^ Just like my previous programming language
+
+^ Elm has these really cool high-level constructs
+
+---
+
 ## Terminology
 
 ![](images/terminology.png)
 
 ^ First we need to define some terminology
+
+^ There are a lot of names for these things
 
 ---
 
@@ -76,9 +88,15 @@ type Suit
 type Card = Card Value Suit
 ```
 
+^ How many cards are possible?
+
 ---
 
 ## 13 values x 4 Suits = 52
+
+^ That's why it's called a product type
+
+^ What's missing?
 
 ---
 
@@ -96,6 +114,10 @@ type Card
   | Joker Coloring
 ```
 
+^ Called "Union Type" or "Algebraic Data Type" or "Tagged Union"
+
+^ Now how many cards?
+
 ---
 
 ## (13 x 4) + 2 = 54
@@ -110,9 +132,15 @@ type Maybe a
   | Just a
 ```
 
+^ You can take it one level crazier and add variables
+
 ---
 
 ## What are they good for?
+
+^ Dry stuff
+
+^ What's it good for?
 
 ---
 
@@ -131,6 +159,14 @@ type alias Order =
   }
 ```
 
+^ Anyone familiar with the three-state boolean problem?
+
+^ Online restaurant checkout system
+
+^ Delivery vs Takeout vs no decision
+
+^ Maybe is a bit of a smell
+
 ---
 
 ## Three states
@@ -138,6 +174,8 @@ type alias Order =
 1. `Just True`
 2. `Just False`
 3. `Nothing`
+
+^ This isn't really a boolean. This has three states
 
 ---
 
@@ -165,6 +203,8 @@ type alias Order =
 
 ![fit](images/double-trouble.jpg)
 
+^ One boolean's easy
+
 ---
 
 ## Double Dependant Boolean
@@ -177,6 +217,8 @@ type alias Order =
   }
 ```
 
+^ New feature, add third-party delivery
+
 ---
 
 ## Four states
@@ -185,6 +227,8 @@ type alias Order =
 * True False
 * False True
 * False False
+
+^ Some don't really make sense
 
 ---
 
@@ -196,6 +240,8 @@ type alias Order =
 , thirdParty = True
 }
 ```
+
+^ Third party takeout?
 
 ---
 
@@ -214,6 +260,10 @@ type alias Order =
   }
 ```
 
+^ DDB is clunky way of getting 4 states
+
+^ Explicit 4 states more readable
+
 ---
 
 ## Improvements
@@ -229,6 +279,10 @@ type alias Order =
 
 ![](images/flags.jpg)
 
+^ More booleans
+
+^ Restaurants are boring. Let's build a video game
+
 ---
 
 ## Less readable
@@ -239,6 +293,8 @@ npc =
   Character True True False
 ```
 
+^ Any guesses about this?
+
 ---
 
 ## More readable
@@ -248,6 +304,8 @@ npc : Character
 npc =
   Character Immortal Female Stationary
 ```
+
+^ What about this
 
 ---
 
@@ -264,6 +322,8 @@ type alias Character =
   , mobility : Mobility
   }
 ```
+
+^ Full definitions
 
 ---
 
@@ -288,6 +348,10 @@ type Gender = Female | Male | NonBinary
 
 ![](images/strings.jpg)
 
+^ All along you've been thinking...
+
+^ Let's take a look
+
 ---
 
 ## How Many Mobilities?
@@ -296,6 +360,10 @@ type Gender = Female | Male | NonBinary
 type Mobility = Mobile | Stationary
 ```
 
+^ Exactly two mobilities
+
+^ Remember Sum type
+
 ---
 
 ## How Many Mobilities?
@@ -303,6 +371,10 @@ type Mobility = Mobile | Stationary
 ```elm
 type alias Mobility = String
 ```
+
+^ Infinitely many mobilities
+
+^ What difference does that make?
 
 ---
 
@@ -320,6 +392,10 @@ move distance character =
     _ ->
       character
 ```
+
+^ Strings need catch-all
+
+^ Adding a new Flying mobility easy not to add a case
 
 ---
 
@@ -342,6 +418,8 @@ You need to account for the following values:
     Flying
 ```
 
+^ ADT gives us a actual compiler error
+
 ---
 
 ## Typos
@@ -351,6 +429,8 @@ npc : Character
 npc =
   Character "Mobil" 55
 ```
+
+^ Again, valid because of infinite valid values
 
 ---
 
@@ -368,6 +448,8 @@ Maybe you want one of the following?
     Mobile
 ```
 
+^ ADT gives us compiler error
+
 ---
 
 ## Improvements
@@ -376,6 +458,18 @@ Maybe you want one of the following?
 * :white_check_mark: Easier to read
 * :x: More modular
 * :white_check_mark: More correct
+
+---
+
+## Primitive Obsession
+
+![](images/caveman.jpg)
+
+^ Concept in many languages
+
+^ Use tools to build more powerful abstractions
+
+^ Don't always go for the lowest common denominator
 
 ---
 
@@ -732,6 +826,52 @@ type Card
 * :white_check_mark: Easier to read
 * :x: More modular
 * :white_check_mark: More correct
+* :white_check_mark: More _expressive_
+
+---
+
+## HTTP
+
+---
+
+## Maybe
+
+```elm
+type alias Model =
+  { lastOrder : Maybe Order
+  }
+```
+
+---
+
+## Explore the shape of data
+
+```elm
+type RemoteData e a
+    = NotAsked
+    | Loading
+    | Failure e
+    | Success a
+```
+
+---
+
+## Improved Model
+
+```elm
+type alias Model =
+  { lastOrder : RemoteData Http.Error Order
+  }
+```
+
+---
+
+## Improvements
+
+* :white_check_mark: Easier to change
+* :white_check_mark: Easier to read
+* :x: More modular
+* :x: More correct
 * :white_check_mark: More _expressive_
 
 ---
